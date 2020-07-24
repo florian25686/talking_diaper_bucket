@@ -43,13 +43,15 @@ def distance():
  
 if __name__ == '__main__':
     try:
-        oldDist = 1
+        oldDist = 0
         loopCounter = 0
         while True:
-
             dist = distance()
+            if oldDist == 0:
+                oldDist = dist
+                
             # Play sound only on bigger distance changes, it appears that it tracks every mm of change
-            if oldDist == 0 or dist - oldDist > 2 or oldDist - dist > 2:
+            if dist - oldDist > 2 or oldDist - dist > 2:
                 os.system('find /home/pi/Windeleimer -name "*.mp3" | sort --random-sort| head -n 1|xargs -d \'\n\' mpg123')
                 oldDist = dist
                 # Reset distance after 2 runs
