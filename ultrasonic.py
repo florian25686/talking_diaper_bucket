@@ -43,18 +43,24 @@ def distance():
  
 if __name__ == '__main__':
     try:
-        oldDist = 0
+        oldDist = 1
+        loopCounter = 0
         while True:
+
             dist = distance()
-            print ("Measured Distance = %.1f cm" % dist)
+            # Play sound only on bigger distance changes, it appears that it tracks every mm of change
             if oldDist == 0 or dist - oldDist > 2 or oldDist - dist > 2:
-                # os.system('mpg123 -l 2 Windeleimer/*.mp3')
                 os.system('find /home/pi/Windeleimer -name "*.mp3" | sort --random-sort| head -n 1|xargs -d \'\n\' mpg123')
-                #find -name "*.mp3" | sort --random-sort| head -n 100|xargs -d '\n' mpg123
                 oldDist = dist
-                print("old dist", oldDist)
+                # Reset distance after 2 runs
+                if loopCounter > 2:
+                    oldDist = 1
+                    loopCounter = -1
+                    print('loopCounter', loopCounter)
+                loopCounter += 1
+            print('loopCounter', loopCounter)
             time.sleep(1)
- 
+
         # Reset by pressing CTRL + C
     except KeyboardInterrupt:
         print("Measurement stopped by User")
